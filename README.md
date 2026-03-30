@@ -1,11 +1,15 @@
 # GL.iNet WireGuard Monitor
 
+![Grafana Dashboard](dashboard.png)
+
 Monitor multiple WireGuard VPN tunnels on a GL.iNet router. Every minute, the router checks each tunnel's handshake freshness, measures latency/jitter/packet loss, and reports to two services:
 
 - **[healthchecks.io](https://healthchecks.io)** — sends you an alert (email, Slack, PagerDuty, etc.) when a tunnel goes down
 - **[Grafana Cloud](https://grafana.com)** — stores metrics and displays a live dashboard
 
 No collector, agent, or cloud VM needed — just scripts that run directly on the router via cron.
+
+**Windows users:** use `manage.ps1` — an interactive PowerShell menu for all operations (deploy, backup, maintenance, diagnostics). No bash required.
 
 ---
 
@@ -54,6 +58,21 @@ All credentials live in `/etc/vpn-monitor/config` on the router (permissions 600
 - [Grafana Cloud account](https://grafana.com) — free tier is sufficient
 - [healthchecks.io account](https://healthchecks.io) — free tier is sufficient
 - Local machine with `bash` and `ssh` (Git Bash works on Windows)
+
+---
+
+## Windows Quick Start
+
+If you're on Windows, use the PowerShell management menu instead of running bash scripts manually:
+
+```powershell
+# In PowerShell (run from the repo folder):
+.\manage.ps1
+```
+
+The menu handles everything: first-time deploy, config updates, maintenance pausing, backups, and diagnostics. It prompts for your router IP and SSH key path on first run, then saves them for future sessions.
+
+> Requires OpenSSH (built into Windows 10/11 — no extra install needed).
 
 ---
 
@@ -168,7 +187,7 @@ This will:
 2. Upload `grafana-dashboard.json`
 3. Select your Prometheus/Grafana Cloud datasource when prompted
 
-The dashboard shows tunnel status, latency, bandwidth, and system health panels with threshold-based coloring.
+The dashboard shows tunnel status, latency, bandwidth, and system health panels with threshold-based coloring. See `dashboard.png` for an example.
 
 ---
 
@@ -294,6 +313,7 @@ bash diagnose.sh
 | `debug-push.sh` | Router (manual) | Test Grafana Cloud connectivity |
 | `config.example` | — | Template — copy to `config` and fill in |
 | `grafana-dashboard.json` | Grafana Cloud | Import for pre-built dashboard |
+| `manage.ps1` | Local (Windows) | Interactive PowerShell menu for all operations |
 
 ---
 
