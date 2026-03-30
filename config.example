@@ -1,0 +1,35 @@
+# Format: INTERFACE=UUID
+# Add one line per active WireGuard tunnel.
+# Create a matching check on healthchecks.io (period: 5min, grace: 2min).
+# To remove a tunnel: delete the line here and archive the check on healthchecks.io.
+#
+# HCHK_API_KEY: the project read-write API key (not a ping UUID).
+# Get it from: healthchecks.io → your project → Settings → API Access → copy the read-write key.
+# Used by maintenance.sh to pause/resume checks during scheduled router reboots.
+HCHK_API_KEY=YOUR-HEALTHCHECKS-API-KEY
+
+wgclient1=YOUR-HEALTHCHECKS-UUID-1
+wgclient2=YOUR-HEALTHCHECKS-UUID-2
+wgclient3=YOUR-HEALTHCHECKS-UUID-3
+wgclient4=YOUR-HEALTHCHECKS-UUID-4
+wgclient5=YOUR-HEALTHCHECKS-UUID-5
+wgclient1_name=Tunnel-1-Label
+wgclient2_name=Tunnel-2-Label
+wgclient3_name=Tunnel-3-Label
+wgclient4_name=Tunnel-4-Label
+wgclient5_name=Tunnel-5-Label
+
+# --- Grafana Cloud (metrics dashboard) ---
+# Sign up free at grafana.com (no credit card needed).
+# In the portal: My Account → your Metrics stack → Details
+#   GRAFANA_METRICS_ID  = the numeric Instance ID shown there
+#   GRAFANA_TOKEN       = a Cloud Access Policy token with metrics:write scope
+#   GRAFANA_URL         = your Prometheus Remote Write URL with "prometheus" replaced by "influx"
+#                         e.g. https://influx-prod-26-prod-ap-south-0.grafana.net/api/v1/push/influx/write
+#   ROUTER_NAME         = label shown on the dashboard (no spaces)
+# WAN interface name on this router (check: ls /sys/class/net/ — usually eth1 or wan)
+WAN_IFACE=eth0
+GRAFANA_METRICS_ID=YOUR-NUMERIC-INSTANCE-ID
+GRAFANA_TOKEN=YOUR-GRAFANA-CLOUD-ACCESS-POLICY-TOKEN
+GRAFANA_URL=https://YOUR-INFLUX-ENDPOINT.grafana.net/api/v1/push/influx/write
+ROUTER_NAME=glinet-main
