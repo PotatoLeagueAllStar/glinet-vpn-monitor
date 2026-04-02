@@ -76,6 +76,14 @@ ssh_cmd "$ROUTER" 'cat > /etc/init.d/vpn-monitor-resume' << 'INITEOF'
 START=99
 start() {
     sleep 30
+    # Skip resume if within scheduled maintenance window (Mon/Thu 2:55-3:15 AM).
+    # The 3:15 AM cron will handle the resume; acting now would cancel the pause early.
+    DOW=$(date +%u)  # 1=Mon, 4=Thu (ISO weekday)
+    HOUR=$(date +%H | sed 's/^0//'); MIN=$(date +%M | sed 's/^0//')
+    TIME=$(( ${HOUR:-0} * 60 + ${MIN:-0} ))
+    if { [ "$DOW" = "1" ] || [ "$DOW" = "4" ]; } && [ "$TIME" -ge 175 ] && [ "$TIME" -lt 195 ]; then
+        exit 0
+    fi
     /bin/sh /etc/vpn-monitor/maintenance.sh stop
 }
 INITEOF
