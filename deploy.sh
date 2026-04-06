@@ -75,7 +75,10 @@ ssh_cmd "$ROUTER" 'cat > /etc/init.d/vpn-monitor-resume' << 'INITEOF'
 #!/bin/sh /etc/rc.common
 START=99
 start() {
-    sleep 30
+    # Immediately pause all checks to suppress false alerts during boot gap.
+    # This is safe to call even if checks are already paused.
+    /bin/sh /etc/vpn-monitor/maintenance.sh start 2>/dev/null || true
+    sleep 90
     # Skip resume if within scheduled maintenance window (Mon/Thu 2:55-3:15 AM).
     # The 3:15 AM cron will handle the resume; acting now would cancel the pause early.
     DOW=$(date +%u)  # 1=Mon, 4=Thu (ISO weekday)
